@@ -1,0 +1,128 @@
+page-order-detail{
+
+	ion-content{
+	    background: #E2E2E2 !important;
+	}
+
+	.margin5px{
+		margin : 5px;
+		height: calc(100% - 10px);
+	    background: white;
+	}
+
+	.bgWhite{
+		background : white !important;
+	}
+
+	.width100{
+		width : 100% !important;
+	}
+
+	.green{
+		color : #449D44;
+	}
+
+	.height2em{
+		height : 2em;
+	}
+
+	.gray{
+		color: gray;
+	}
+
+	.deliveredClass{
+		position: absolute;
+	    right: 26px;
+	    font-weight : 600;
+	    color : #449D44;
+	}
+
+	.comboMenuImage{
+	    height: 40px;
+    	background-position: center;
+	    background-size: 100% 100%;
+	}
+
+	.acceptButton{
+		background-color : #449D44 !important;
+		height: 3rem;
+	}
+
+	.rejectButton{
+		height: 3rem;
+	}
+
+	.whiteDiv{
+		background : white !important;
+		margin-bottom : 2vh;
+		font-size : 1.2rem;
+		padding : 10px;
+	}
+
+	ion-item .item-inner{
+		border : none !important;
+	}
+	
+	.paddingTop9px{
+		padding-top : 9px;
+	}
+
+	.height2px{
+		height : 2px;
+	}
+
+	ion-datetime{
+	    width: 100% !important;
+	    flex: auto !important;
+        padding: 5px !important;
+	}
+
+	ion-datetime .item-cover{
+		position : inherit !important;
+		width : 0 !important;
+	}
+
+	ion-datetime button{
+		border-left: 5px solid transparent;
+    	margin-top: 2%;
+    	padding: 0;
+	    border-right: 5px solid transparent;
+	    border-top: 5px solid #999999;
+	}
+
+	ion-item h3{
+		margin : 0 !important;
+	}
+
+	.padding10px{
+		padding : 10px;
+	}
+
+	.divHighlighted{
+	    background: #f1f1f1;
+	    margin: 1vh 0;
+	}
+
+	.greenBorder, .grayBorder{
+		position: relative;
+		margin-bottom : 2vh;
+	}
+
+
+	.greenBorder{
+		border : 4px solid #449D44 !important;
+	}
+
+	.grayBorder{
+		border : 2px solid gray !important;
+	}
+
+	.makeDeliverIcon{
+	    position: absolute;
+	    top: -10px;
+	    right: -6px;
+	    font-size: 2.5rem;
+	}
+
+    
+}

@@ -1,0 +1,232 @@
+<ion-header>
+    <ion-navbar color="secondary">
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Edit Profile</ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content padding>
+    <ion-row class="profile-area">
+        <ion-col col-12 text-center>
+
+            <label>
+                <img class="profile-img rounded-circle" style="object-fit: cover;" [src]="driverImage(driver.image)">
+                <!-- <img class="profile-img rounded-circle" [hidden]="lastImage !== null" *ngIf="!driver.image " src="assets/imgs/profile.jpg"> -->
+                <!-- <img src="{{pathForImage(lastImage)}}" class="profile-img rounded-circle" [hidden]="lastImage === null"> -->
+                <div class="tras-layer"></div>
+                <ion-icon name="camera" (click)="presentActionSheet('profilePic')" class="image-placeholder"></ion-icon>
+            </label>
+            <input type="file" id="file" name="file" ng2FileSelect [uploader]="uploader" (change)="uploader.uploadAll()" style="display:none;"/>
+        </ion-col>
+    </ion-row>
+    <ion-list no-margin>
+        <form [formGroup]="editForm" (ngSubmit)="profileUpdate()">
+            <!-- <ion-item>
+                <ion-label floating>Username</ion-label>
+                <ion-input type="text" formControlName="username" disabled></ion-input>
+            </ion-item>
+            <div *ngIf="formErrors && formErrors.username" margin-horizontal class="alert alert-danger mt-3">
+                {{ formErrors.username }}
+            </div> -->
+            <ion-item>
+                <ion-label floating>First Name</ion-label>
+                <ion-input type="text" formControlName="firstname" ></ion-input>
+            </ion-item>
+            <div *ngIf="formErrors && formErrors.firstname" margin-horizontal class="alert alert-danger mt-3 ">
+                {{ formErrors.firstname }}
+            </div>
+            <ion-item>
+                <ion-label floating>Last Name</ion-label>
+                <ion-input type="text" formControlName="lastname"></ion-input>
+            </ion-item>
+            <div *ngIf="formErrors && formErrors.lastname" margin-horizontal class="alert alert-danger mt-3">
+                {{ formErrors.lastname }}
+            </div>
+            <ion-item>
+                <ion-label floating>Email</ion-label>
+                <ion-input type="text" formControlName="email"></ion-input>
+            </ion-item>
+            <div *ngIf="formErrors && formErrors.email" margin-horizontal class="alert alert-danger mt-3">
+                {{ formErrors.email }}
+            </div>
+   
+            <label for="exampleInputEmail1" style="margin-top: 10%;color: black;">* Zip Code will help you receiving the orders to deliver near by your location.</label>
+            <label for="exampleInputEmail1" style="color: black; ">* Zip Code (<small>   use commas to separate multiple Zip Codes (i.e 91107, 91108,91109)</small>).</label>
+            <ion-item>
+                    
+                    <ion-label floating> Zip code </ion-label>
+                <ion-input type="text" formControlName="zip"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label floating>Mobile No.</ion-label>
+                <ion-input type="text" formControlName="phoneNo"></ion-input>
+            </ion-item>
+            <div *ngIf="formErrors && formErrors.phoneNo" margin-horizontal class="alert alert-danger mt-3">
+                {{ formErrors.phoneNo }}
+            </div>
+            <ion-item>
+                <ion-label floating>Vehicle Type</ion-label>
+                <ion-input type="text" formControlName="vehicleType"></ion-input>
+            </ion-item>
+            <div *ngIf="formErrors && formErrors.vehicleType" margin-horizontal class="alert alert-danger mt-3">
+                {{ formErrors.vehicleType  }}
+            </div>
+            <ion-item>
+                <ion-label floating>Vehicle Name </ion-label>
+                <ion-input type="text" formControlName="vehicleName"></ion-input>
+            </ion-item>
+            <div *ngIf="formErrors && formErrors.vehicleName" margin-horizontal class="alert alert-danger mt-3">
+                {{ formErrors.vehicleName   }}
+            </div>
+            <ion-item>
+                <ion-label floating>Vehicle No. </ion-label>
+                <ion-input type="text" formControlName="vehicleNo"></ion-input>
+            </ion-item>
+            <div *ngIf="formErrors && formErrors.vehicleNo" margin-horizontal class="alert alert-danger mt-3">
+                {{ formErrors.vehicleNo   }}
+            </div>
+            <ion-item>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Address</label>
+                    <input type="text" class="form-control"  formControlName="address" id="addressautocomplete" aria-describedby="emailHelp" placeholder="Enter address">  
+                </div>
+            </ion-item>
+            <label for="exampleInputEmail1" style="margin-top: 25%;">* Payout Information</label>
+            <ion-list radio-group formControlName="paymentmethod">
+                <div style="width:40%;float:left">
+                    <ion-item  >
+                        <ion-label>By Bank </ion-label>
+                        <ion-radio value="ByBank" color="primary"></ion-radio >
+                        
+                    </ion-item>
+                </div>
+                <div style="width:50%;float:right;margin-left: 10%">
+                    <ion-item>
+                        <ion-label>By Cheque</ion-label>
+                        <ion-radio value="ByCheque" color="primary"></ion-radio >
+                    </ion-item>
+                </div>
+       
+          
+                
+            </ion-list>
+            <ion-item>
+                <ion-label floating>Account Holder Name: </ion-label>
+                <ion-input type="text" formControlName="AccountName"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label floating>Account Number: </ion-label>
+                <ion-input type="text" formControlName="AccountNumber"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label floating>Bank Name: </ion-label>
+                <ion-input type="text" formControlName="BankName"></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-grid>
+                        <ion-row>
+                                <ion-col>
+            <label for="exampleInputEmail1" style="margin-top: 25%;">Void Cheque</label>
+                                </ion-col>
+                                <ion-col>
+            <div class="parents">
+            <img class="profile-img rounded-circle" style="object-fit: cover;" [src]="drivingVoid(driver.voidcheque)">
+            <!-- <img class="profile-img rounded-circle" [hidden]="lastImage !== null" *ngIf="!driver.image " src="assets/imgs/profile.jpg"> -->
+            <!-- <img src="{{pathForImage(lastImage)}}" class="profile-img rounded-circle" [hidden]="lastImage === null"> -->
+            <div class="tras-layer-profile"></div>
+            <ion-icon name="camera" (click)="presentActionSheet('voidCheque')" class="image-placeholder-profile"></ion-icon>
+            </div>
+            </ion-col>
+            </ion-row>
+            </ion-grid>
+
+        </ion-item>
+
+    <ion-item>
+        <ion-grid>
+                <ion-row>
+                        <ion-col>
+    <label for="exampleInputEmail1" style="margin-top: 25%;">Police Certificate</label>
+                        </ion-col>
+                        <ion-col>
+    <div class="parents">
+    <img class="profile-img rounded-circle" style="object-fit: cover;" [src]="policeCertificate(driver.policecertificate)">
+    <!-- <img class="profile-img rounded-circle" [hidden]="lastImage !== null" *ngIf="!driver.image " src="assets/imgs/profile.jpg"> -->
+    <!-- <img src="{{pathForImage(lastImage)}}" class="profile-img rounded-circle" [hidden]="lastImage === null"> -->
+    <div class="tras-layer-profile"></div>
+    <ion-icon name="camera" (click)="presentActionSheet('policeCertificate')" class="image-placeholder-profile"></ion-icon>
+    </div>
+    </ion-col>
+    </ion-row>
+    </ion-grid>
+
+</ion-item>
+<ion-item>
+    <ion-grid>
+            <ion-row>
+                    <ion-col>
+<label for="exampleInputEmail1" style="margin-top: 25%;">Car Insurance</label>
+                    </ion-col>
+                    <ion-col>
+<div class="parents">
+<img class="profile-img rounded-circle" style="object-fit: cover;" [src]="carInsurance(driver.carinsurance)">
+<!-- <img class="profile-img rounded-circle" [hidden]="lastImage !== null" *ngIf="!driver.image " src="assets/imgs/profile.jpg"> -->
+<!-- <img src="{{pathForImage(lastImage)}}" class="profile-img rounded-circle" [hidden]="lastImage === null"> -->
+<div class="tras-layer-profile"></div>
+<ion-icon name="camera" (click)="presentActionSheet('carInsurance')" class="image-placeholder-profile"></ion-icon>
+</div>
+</ion-col>
+</ion-row>
+</ion-grid>
+
+</ion-item>
+
+<ion-item>
+    <ion-grid>
+            <ion-row>
+                    <ion-col>
+<label for="exampleInputEmail1" style="margin-top: 25%;">Car NumberPlate</label>
+                    </ion-col>
+                    <ion-col>
+<div class="parents">
+<img class="profile-img rounded-circle" style="object-fit: cover;" [src]="carNumberPlate(driver.carnumberplate)">
+<!-- <img class="profile-img rounded-circle" [hidden]="lastImage !== null" *ngIf="!driver.image " src="assets/imgs/profile.jpg"> -->
+<!-- <img src="{{pathForImage(lastImage)}}" class="profile-img rounded-circle" [hidden]="lastImage === null"> -->
+<div class="tras-layer-profile"></div>
+<ion-icon name="camera" (click)="presentActionSheet('carNumberPlate')" class="image-placeholder-profile"></ion-icon>
+</div>
+</ion-col>
+</ion-row>
+</ion-grid>
+
+</ion-item>
+
+
+            <ion-item>
+                    <ion-grid>
+                            <ion-row>
+                                    <ion-col>
+                <label for="exampleInputEmail1" style="margin-top: 25%;">Driving License</label>
+                                    </ion-col>
+                                    <ion-col>
+                <div class="parents">
+                <img class="profile-img rounded-circle" style="object-fit: cover;" [src]="drivingLicense(driver.license)">
+                <!-- <img class="profile-img rounded-circle" [hidden]="lastImage !== null" *ngIf="!driver.image " src="assets/imgs/profile.jpg"> -->
+                <!-- <img src="{{pathForImage(lastImage)}}" class="profile-img rounded-circle" [hidden]="lastImage === null"> -->
+                <div class="tras-layer-profile"></div>
+                <ion-icon name="camera" (click)="presentActionSheet('license')" class="image-placeholder-profile"></ion-icon>
+                </div>
+                </ion-col>
+                </ion-row>
+                </ion-grid>
+
+            </ion-item>
+            
+            
+            <button ion-button color="secondary" full [disabled]="!editForm.valid">Save</button>
+        </form>
+      
+    </ion-list>
+</ion-content>

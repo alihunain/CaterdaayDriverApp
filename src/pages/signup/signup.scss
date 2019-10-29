@@ -1,0 +1,56 @@
+page-signup {
+
+  .padding5rem-2rem{
+    padding : 5rem 2rem;
+  }
+
+  .logo {
+    height: 6rem;
+  }
+  .profile-img {
+    background: #fff;
+    height: 100px;
+    width: 100px;
+  }
+  .parents{
+    position: relative;
+    display: inline-block;
+  }
+  .image-placeholder-profile{
+    position: absolute;
+    /* right: 50%; */
+    left: 35%;
+    top: 33%;
+    /* bottom: 50%; */
+    font-size: 35px;
+    color: #fff;
+    /* padding: 35px 0; */
+  }
+  .tras-layer-profile{
+    
+    background: rgba(0, 0, 0, 0.458824);
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    /* margin: 5px 0; */
+    border-radius: 100%;
+  }
+  ion-item {
+    background-color: transparent !important;
+    padding-left: 0px !important;
+    color: #e0e0e0 !important;
+    font-size: 1.4rem !important;
+  }
+
+  .item-input .label-md,
+  .item-select .label-md,
+  .item-datetime .label-md {
+    color: #e0e0e0 !important;
+  }
+  .checkbox-md .checkbox-icon {
+    border-radius: 8px !important;
+     border-color: white !important; 
+    background-color: transparent !important; 
+  }
+}

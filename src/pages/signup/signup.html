@@ -1,0 +1,212 @@
+
+<ion-content padding style="background: url('assets/imgs/bg.png') center fixed;background-size: cover;">
+    <ion-row>
+        <ion-col col-12 class="padding5rem-2rem">
+            <img src="assets/imgs/MealDaay-small.png" class="logo">
+        </ion-col>
+    </ion-row>
+
+    <ion-list no-margin>
+        <form role="form" [formGroup]="signupForm" (ngSubmit)="doSignup()">
+            <ion-item>
+                <ion-label floating>First Name</ion-label>
+                <ion-input type="text" formControlName="firstname"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label floating>Last Name</ion-label>
+                <ion-input type="text" formControlName="lastname"></ion-input>
+            </ion-item>
+            <!-- <ion-item>
+                <ion-label floating>Username</ion-label>
+                <ion-input type="text" formControlName="username"></ion-input>
+            </ion-item>
+            <div *ngIf="formErrors.username" class="alert alert-danger mt-2">
+                {{ formErrors.username }}
+            </div> -->
+            <ion-item>
+                <ion-label floating>Email</ion-label>
+                <ion-input autocapitalize="off" type="text" formControlName="email"></ion-input>
+            </ion-item>
+            <div *ngIf="formErrors.email" class="alert alert-danger mt-2">
+                {{ formErrors.email }}
+            </div>
+            <ion-item>
+                <ion-label floating>Password</ion-label>
+                <ion-input type="{{type}}" formControlName="password" [pattern] = "passwordp"></ion-input>
+                <button class="hideshow" *ngIf="!showPass" ion-button clear type="button"  color="light" item-right (click)="showPassword()">Show</button>
+                <button class="hideshow" *ngIf="showPass" ion-button  clear type="button"  color="light" item-right (click)="showPassword()">Hide</button>
+            </ion-item>
+            <div *ngIf="formErrors.password" class="alert alert-danger mt-2">
+                {{ formErrors.password }}
+            </div>
+            <ion-item>
+                <ion-label floating>Confirm password</ion-label>
+                <ion-input type="{{ctype}}" formControlName="cpassword"></ion-input>
+                <button class="hideshow" *ngIf="!cshowPass" ion-button clear type="button" color="light" item-right (click)="cshowPassword()">Show</button>
+                <button  class="hideshow" *ngIf="cshowPass" ion-button clear type="button" color="light" item-right (click)="cshowPassword()">Hide</button>
+            </ion-item>
+            <div *ngIf="matchPassword" class="alert alert-danger mt-2">
+                Password does not match.
+            </div>
+
+            <label for="exampleInputEmail1" style="margin-top: 10%;color: white;">* Zip Code will help you receiving the orders to deliver near by your location.</label>
+            <label for="exampleInputEmail1" style="margin-top: 10%;color: white;">* Zip Code (<small>   use commas to separate multiple Zip Codes (i.e 91107, 91108,91109)</small>).</label>
+          
+            <ion-item>
+                <ion-label floating>Zip Code </ion-label>
+                <ion-input placeholder="" autocapitalize="off" type="text" formControlName="zip"></ion-input>
+            </ion-item>
+          
+            <div *ngIf="formErrors.zip" class="alert alert-danger mt-2">
+                {{ formErrors.zip }}
+            </div>
+            <label for="exampleInputEmail1" style="margin-top: 10%;color: white;">* Payout Information</label>
+            <ion-list radio-group formControlName="paymentmethod">
+                <div style="width:40%;float:left">
+                    <ion-item  >
+                        <ion-label>By Bank </ion-label>
+                        <ion-radio value="ByBank" color="primary"></ion-radio >
+                        
+                    </ion-item>
+                </div>
+                <div style="width:40%;float:right;margin-left: 10%">
+                    <ion-item>
+                        <ion-label>By Cheque</ion-label>
+                        <ion-radio value="ByCheque" color="primary"></ion-radio >
+                    </ion-item>
+                </div>
+       
+          
+                
+            </ion-list>
+       
+            <ion-item>
+                <ion-label floating>Account Holder Name: </ion-label>
+                <ion-input type="text" formControlName="AccountName"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label floating>Account Number: </ion-label>
+                <ion-input type="text" formControlName="AccountNumber"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label floating>Bank Name: </ion-label>
+                <ion-input type="text" formControlName="BankName"></ion-input>
+            </ion-item>
+
+
+
+
+            <ion-item>
+                <ion-grid>
+                        <ion-row>
+                                <ion-col>
+            <label for="exampleInputEmail1" style="margin-top: 25%;">Void Cheque</label>
+                                </ion-col>
+                                <ion-col>
+            <div class="parents">
+            <img class="profile-img rounded-circle" [src]="drivingVoid()">
+            <!-- <img class="profile-img rounded-circle" [hidden]="lastImage !== null" *ngIf="!driver.image " src="assets/imgs/profile.jpg"> -->
+            <!-- <img src="{{pathForImage(lastImage)}}" class="profile-img rounded-circle" [hidden]="lastImage === null"> -->
+            <div class="tras-layer-profile"></div>
+            <ion-icon name="camera" (click)="presentActionSheet('voidCheque')" class="image-placeholder-profile"></ion-icon>
+            </div>
+            </ion-col>
+            </ion-row>
+            </ion-grid>
+
+        </ion-item>
+        <ion-item>
+            <ion-grid>
+                    <ion-row>
+                            <ion-col>
+        <label for="exampleInputEmail1" style="margin-top: 25%;">Police Certificate</label>
+                            </ion-col>
+                            <ion-col>
+        <div class="parents">
+        <img class="profile-img rounded-circle" [src]="policeCertificate()">
+        <!-- <img class="profile-img rounded-circle" [hidden]="lastImage !== null" *ngIf="!driver.image " src="assets/imgs/profile.jpg"> -->
+        <!-- <img src="{{pathForImage(lastImage)}}" class="profile-img rounded-circle" [hidden]="lastImage === null"> -->
+        <div class="tras-layer-profile"></div>
+        <ion-icon name="camera" (click)="presentActionSheet('policeCertificate')" class="image-placeholder-profile"></ion-icon>
+        </div>
+        </ion-col>
+        </ion-row>
+        </ion-grid>
+
+    </ion-item>
+    <ion-item>
+        <ion-grid>
+                <ion-row>
+                        <ion-col>
+    <label for="exampleInputEmail1" style="margin-top: 25%;">Car Insurance</label>
+                        </ion-col>
+                        <ion-col>
+    <div class="parents">
+    <img class="profile-img rounded-circle" [src]="carInsurance()">
+    <!-- <img class="profile-img rounded-circle" [hidden]="lastImage !== null" *ngIf="!driver.image " src="assets/imgs/profile.jpg"> -->
+    <!-- <img src="{{pathForImage(lastImage)}}" class="profile-img rounded-circle" [hidden]="lastImage === null"> -->
+    <div class="tras-layer-profile"></div>
+    <ion-icon name="camera" (click)="presentActionSheet('carInsurance')" class="image-placeholder-profile"></ion-icon>
+    </div>
+    </ion-col>
+    </ion-row>
+    </ion-grid>
+
+</ion-item>
+<ion-item>
+    <ion-grid>
+            <ion-row>
+                    <ion-col>
+<label for="exampleInputEmail1" style="margin-top: 25%;">Car NumberPlate</label>
+                    </ion-col>
+                    <ion-col>
+<div class="parents">
+<img class="profile-img rounded-circle" [src]="carNumberPlate()">
+<!-- <img class="profile-img rounded-circle" [hidden]="lastImage !== null" *ngIf="!driver.image " src="assets/imgs/profile.jpg"> -->
+<!-- <img src="{{pathForImage(lastImage)}}" class="profile-img rounded-circle" [hidden]="lastImage === null"> -->
+<div class="tras-layer-profile"></div>
+<ion-icon name="camera" (click)="presentActionSheet('carNumberPlate')" class="image-placeholder-profile"></ion-icon>
+</div>
+</ion-col>
+</ion-row>
+</ion-grid>
+
+</ion-item>
+            <ion-item>
+                    <ion-grid>
+                            <ion-row>
+                                    <ion-col>
+                <label for="exampleInputEmail1" style="margin-top: 25%;">Driving License</label>
+                                    </ion-col>
+                                    <ion-col>
+                <div class="parents">
+                <img class="profile-img rounded-circle" [src]="drivingLicense()">
+                <!-- <img class="profile-img rounded-circle" [hidden]="lastImage !== null" *ngIf="!driver.image " src="assets/imgs/profile.jpg"> -->
+                <!-- <img src="{{pathForImage(lastImage)}}" class="profile-img rounded-circle" [hidden]="lastImage === null"> -->
+                <div class="tras-layer-profile"></div>
+                <ion-icon name="camera" (click)="presentActionSheet('license')" class="image-placeholder-profile"></ion-icon>
+                </div>
+                </ion-col>
+                </ion-row>
+                </ion-grid>
+
+            </ion-item>
+                    <ion-grid>
+                    <ion-row style="position: relative;">
+                            
+                            <ion-label style="color:white;font-size: 12px;margin-left: 15%;"><ion-checkbox  formControlName="termsAndCondition"> </ion-checkbox> <span style="margin-left: 10px;position: absolute;top: 12px;">I accept the <span style="text-decoration: underline;margin-left: 5px;" (click)="presentTermsAndConditionAlert()">Terms and Conditions</span></span></ion-label>
+                        
+                    </ion-row>
+                </ion-grid>
+              
+            <button class="mt-3" ion-button full color="secondary" [disabled]="!signupForm.valid">Sign Up</button>
+        </form>
+    </ion-list>
+
+    <ion-row>
+        <ion-col col-12 text-center>
+            <a class="colorWhite" (click)="goToLoginPage()">Login</a>
+        </ion-col>
+    </ion-row>
+</ion-content>
+

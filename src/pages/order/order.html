@@ -1,0 +1,102 @@
+<ion-header>
+    <ion-navbar color="secondary"> 
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Orders</ion-title>
+    </ion-navbar>
+</ion-header>
+
+
+<ion-content padding-no>
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    
+    <ion-item class="p-0">
+        <ion-row class="px-4">Summary </ion-row>
+    </ion-item>
+        <ion-row>
+            
+        </ion-row>
+    <ion-row class="summaryClass p-0" >
+        <ion-col col-12 text-center >
+            <h4 class="m-0 pt-2">{{totalCash |number : '1.2-2'}} CAD</h4>
+            <div class="amountDescription pb-3">Total Cash Received</div>
+        </ion-col>
+        <!-- <ion-col col-6 text-center>
+            <h4  class="m-0 pt-2">${{totalTip |number : '1.2-2'}}</h4>
+            <div class="amountDescription pb-3">Total driver tip received</div>
+        </ion-col> -->
+    </ion-row>
+<hr class="m-0">
+    <ion-segment [(ngModel)]="orderStatus" color="secondary" class="mb-2">
+        <ion-segment-button value="pending">
+            Pending
+        </ion-segment-button>
+        <ion-segment-button value="completed">
+            Completed
+        </ion-segment-button>
+    </ion-segment>
+
+    <div [ngSwitch]="orderStatus">
+        <ion-list *ngSwitchCase="'pending'">
+            <h3 *ngIf="pendorders?.length == 0" class="text-center">No orders</h3>
+            <div *ngFor="let order of pendorders; let i = index ">
+                <ion-item  (click)="openDetail(i, 'pending')" [ngClass]='(order.status == "driveraccepted" && order.driverDetail._id == driver._id)? "bgSuccess": "bg-white" '>
+
+                    <h2><ion-icon name="pizza"></ion-icon> &nbsp; #{{order._id.substr(18,6)}}</h2>
+
+                    <h3 class="whiteSpaceInitial"><ion-icon name="pin"></ion-icon> &nbsp; {{order.fulladdress.address}}</h3>
+
+                    <ion-row class="whiteSpaceInitial">Total Amount : &nbsp; <strong><span *ngIf = "order.currency">{{order.currency}} </span>{{order.total | number : '1.2-2'}}</strong> &nbsp; <span text-capitalize> ( {{order.paymenttype}} )</span> </ion-row>
+
+                    <ion-row *ngIf="order.status == 'completed' || order.status == 'driverrejected'"><strong text-capitalize>Order Prepared</strong> &nbsp;(Waiting for Driver)
+                    </ion-row>
+
+                    <ion-row *ngIf="order.status == 'driveraccepted'"><strong text-capitalize>In Process</strong></ion-row>
+                    <ion-row *ngIf="order.status == 'delivered'"><strong text-capitalize>Delivered</strong></ion-row>
+
+                    <ion-row><ion-icon name="time"></ion-icon> &nbsp; {{ formatDate(order.ordertiming.datetime)  | date:'medium'}}</ion-row>
+
+                    <!-- <h2 class="whiteSpaceInitial"><ion-icon name="pin"></ion-icon> &nbsp; {{order.fulladdress.address}}</h2>
+
+                    <p class="text-capitalize"><span class="bg-success text-white px-1 rounded" *ngIf="order.total"> <span *ngIf = "order.currency">{{order.currency}}</span> {{order.total | number : '1.2-2'}}</span><span> {{order.paymenttype}}</span></p>
+
+                    <p><ion-icon name="time"></ion-icon> &nbsp; {{order.created_at| date:'shortTime'}} {{order.created_at| date}}</p> -->
+
+
+                    <!-- <button ion-button clear item-end color="secondary">View</button> -->
+
+                </ion-item>
+            </div>
+        </ion-list>
+        
+        <ion-list *ngSwitchCase="'completed'">
+            <h3 *ngIf="compOrders?.length == 0" class="text-center">No orders</h3>
+            <div  *ngFor="let order of compOrders;let i = index ">
+                <ion-item (click)="openDetail(i, 'completed')"> 
+                    <h2><ion-icon name="pizza"></ion-icon> &nbsp; #{{order._id.substr(18,6)}}</h2>
+
+                    <h3 class="whiteSpaceInitial"><ion-icon name="pin"></ion-icon> &nbsp; {{order.fulladdress.address}}</h3>
+
+                    <ion-row class="whiteSpaceInitial">Total Amount : &nbsp; <strong><span *ngIf = "order.currency">{{order.currency}} </span>{{order.total | number : '1.2-2'}}</strong> &nbsp; <span text-capitalize> ( {{order.paymenttype}} )</span> </ion-row>
+
+                    <ion-row *ngIf="order.status == 'delivered'"><strong text-capitalize>Delivered</strong></ion-row>
+
+                    <ion-row><ion-icon name="time"></ion-icon> 
+                        &nbsp; {{formatDate(order.ordertiming.datetime) | date:'medium'}}</ion-row>
+
+
+                    <!-- <h2 class="whiteSpaceInitial"><ion-icon name="pin"></ion-icon> &nbsp; {{order.fulladdress.address}}</h2>
+
+                    <p class="text-capitalize"><span class="bg-success text-white px-1 rounded" *ngIf="order.total"><span *ngIf = "order.currency">{{order.currency}}</span>{{order.total |number : '1.2-2' }}</span><span> {{order.paymenttype}}</span></p>
+
+                    <p><ion-icon name="time"></ion-icon> &nbsp; {{order.created_at| date:'shortTime'}} {{order.created_at| date}}</p> -->
+                    <!-- <button ion-button clear item-end color="secondary" >View</button> -->
+
+                </ion-item>
+            </div>
+        </ion-list>
+    </div>
+</ion-content>

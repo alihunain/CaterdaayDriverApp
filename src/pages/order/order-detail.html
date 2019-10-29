@@ -1,0 +1,319 @@
+<ion-header>
+    <ion-navbar color="secondary">
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Order Detail</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding *ngIf="orderDetail">
+
+    <ion-row class="whiteDiv">
+        <ion-row class= "width100">
+            <ion-col col-12><strong>Delivery Details :</strong></ion-col>
+        </ion-row>
+        <hr class="width100 height2px">
+        <ion-row class= "width100">
+            <ion-col col-12><strong>Order ID : </strong>#{{orderDetail._id.substr(18,6)}}</ion-col>
+            <!-- <ion-col col-12><strong>Received at : </strong>{{formatDate(orderDetail.created_at) | date:'medium' }}</ion-col> -->
+        </ion-row>
+    </ion-row>
+
+    <ion-row class="whiteDiv" *ngIf = "orderDetail.restaurantData">
+        <ion-row class= "width100">
+            <ion-col col-12><strong>Chef Detail :</strong></ion-col>
+        </ion-row>
+        <hr class="width100 height2px">
+        <ion-row class= "width100">
+            <ion-col col-12 text-capitalize><strong>Name : </strong>{{orderDetail.restaurantData.restaurantname}}</ion-col>
+            <ion-col col-12><strong>Address : </strong>{{orderDetail.restaurantData.address}}</ion-col>
+        </ion-row>
+    </ion-row>
+
+    <ion-row class="whiteDiv">
+        <ion-row class= "width100">
+            <ion-col col-12 text-capitalize>
+                <strong>Order Status :  </strong>
+                
+                <span *ngIf = "orderDetail.status == 'accepted'||orderDetail.status == 'completed' || orderDetail.status == 'driverrejected'">&nbsp;Waiting for Driver Acceptance</span>
+                <span *ngIf = "orderDetail.status == 'driveraccepted'">In Process</span>
+                <span *ngIf = "orderDetail.status == 'delivered'">Delivered</span>
+            </ion-col>
+        </ion-row>
+        <ion-row class= "width100" *ngIf="orderDetail.status == 'completed' || orderDetail.status == 'driverrejected' && !orderDetail.driverDetail ">
+            <hr class="width100 height2px">
+            <ion-col col-12>
+                <button class="acceptButton" ion-button (click)="changeStatus('driveraccepted', orderDetail._id)">Accept</button>
+
+                <button class="rejectButton themeRedBg" ion-button (click)="changeStatus('driverrejected', orderDetail._id)">Reject</button>
+            </ion-col>
+        </ion-row>
+
+        <ion-row padding-horizontal class= "width100" *ngIf="orderDetail.status == 'driveraccepted' && orderDetail.driverDetail['_id'] == driver['_id']">
+            <!-- <ion-col *ngIf = "(orderDetail.items.length > 0 || orderDetail.combo.length > 0) && !orderDetail.menuStatus" col-12 class="text-center">
+                <button class="height2em" ion-button full color="secondary" (click)="completeStatus()">
+                    Mark
+                    <span *ngIf = "orderDetail.package.length > 0">&nbsp; Items &nbsp;</span>
+                    <span *ngIf = "orderDetail.package.length == 0">&nbsp; Order &nbsp;</span>
+                    Delivered
+                </button>
+            </ion-col> -->
+            <ion-col col-12 class="text-center">
+                <button class="height2em" ion-button full color="secondary" (click)="startTracking()">Show Map</button>
+            </ion-col>
+        </ion-row>
+        <div id="map" style="width:100%;background:gainsboro"></div>
+    </ion-row>
+
+    <!-- <ion-row class="whiteDiv">
+        <ion-row class= "width100">
+            <ion-col col-12><strong>Order Type :</strong></ion-col>
+        </ion-row>
+        <hr class="width100 height2px">
+        <ion-row class= "width100">
+            <ion-col col-12><span *ngIf = "orderDetail.ordertiming && orderDetail.ordertiming.type == 'now'">Order for Now</span><span *ngIf = "orderDetail.ordertiming && orderDetail.ordertiming.type == 'later'">Pre Order for Later</span></ion-col>
+          
+            <ion-col col-12 *ngIf = "orderDetail.ordertiming && orderDetail.ordertiming.datetime"><strong>When to deliver : </strong>{{formatDateForDetailOrderTiming(orderDetail.ordertiming.datetime) }}</ion-col>
+        </ion-row>
+    </ion-row> -->
+
+    <ion-row class="whiteDiv">
+        <ion-row class= "width100">
+            <ion-col col-12><strong>Payment Type : </strong><span text-capitalize>{{orderDetail.paymenttype}}</span></ion-col>
+        </ion-row>
+        <!-- <hr class="width100 height2px">
+        <ion-row padding-horizontal class= "width100">
+            <ion-col col-12 text-capitalize>{{orderDetail.paymenttype}}</ion-col>
+        </ion-row> -->
+    </ion-row>
+
+    <ion-row class="whiteDiv" *ngIf = "orderDetail.customerData">
+        <ion-row class= "width100">
+            <ion-col col-12><strong>Customer Details :</strong></ion-col>
+        </ion-row>
+        <hr class="width100 height2px">
+        <ion-row class= "width100">
+            <ion-col *ngIf = "orderDetail.customerData.firstname" col-12 text-capitalize><strong>Name : </strong>{{orderDetail.customerData.firstname}} {{orderDetail.customerData.lastname}}</ion-col>
+            <ion-col col-12><strong>Email ID : </strong>{{orderDetail.customerData.email}}</ion-col>
+            <ion-col col-12 *ngIf = "orderDetail.fulladdress"><strong>Delivery Address : </strong>{{orderDetail.fulladdress.address}}</ion-col>
+            <ion-col col-12 *ngIf = "orderDetail.fulladdress"><strong>Zipcode : </strong>{{orderDetail.fulladdress.zipcode}}</ion-col>
+        </ion-row>
+    </ion-row>
+
+    <!-- <ion-row class="whiteDiv" *ngIf = "orderDetail.driverDetail">
+        <ion-row class= "width100">
+            <ion-col col-12><strong>Driver Detail :</strong></ion-col>
+        </ion-row>
+        <hr class="width100 height2px">
+        <ion-row class= "width100">
+            <ion-col *ngIf = "orderDetail.driverDetail.name" col-12 text-capitalize><strong>Name : </strong>{{orderDetail.driverDetail.name}}</ion-col>
+            <ion-col *ngIf = "orderDetail.driverDetail.phone" col-12><strong>Contact No. : </strong>{{orderDetail.driverDetail.phone}}</ion-col>
+            <ion-col *ngIf = "orderDetail.driverDetail.vehicleType" col-12 text-capitalize><strong>Vehicle Type : </strong>{{orderDetail.driverDetail.vehicleType}}</ion-col>
+            <ion-col *ngIf = "orderDetail.driverDetail.vehicleName" col-12 text-capitalize><strong>Vehicle Name : </strong>{{orderDetail.driverDetail.vehicleName}}</ion-col>
+            <ion-col *ngIf = "orderDetail.driverDetail.vehicleNo" col-12><strong>Vehicle Number : </strong>{{orderDetail.driverDetail.vehicleNo}}</ion-col>
+        </ion-row>
+    </ion-row> -->
+
+    <!-- <ion-row *ngIf = "orderDetail.items && orderDetail.items.length > 0" class = "whiteDiv">
+        <ion-row class="width100"><strong>Daily Menu Items</strong><span *ngIf = "orderDetail.items[0].orderStatus == 'delivered'" class="deliveredClass"> Delivered</span></ion-row>
+        <ion-row class="width100"><strong>Delivery Date :    {{getDateOfDailyMenu()}}  </strong> </ion-row>
+        <ion-row class="width100"><strong>Delivery Time :    {{getTimeOfDailyMenuForDelivery()}}  </strong> </ion-row>
+        <hr class="width100 height2px">
+        <ion-row *ngFor = "let item of orderDetail.items let i = index; " class="width100">
+            <ion-col class="">
+                <strong>{{i+1}})</strong> {{item.name}}
+            </ion-col>
+            <ion-col col-2>
+                <strong> X {{item.qty}} </strong>
+            </ion-col>
+            <ion-col text-right col-4 col-sm-3 class="colorLightGray paddingTop9px">
+                <span *ngIf = "orderDetail.currency">{{orderDetail.currency}}</span> {{item.qty * item.price | number : '1.2-2'}}
+            </ion-col>
+        </ion-row>
+
+
+        <ion-row *ngIf="orderDetail.driverDetail">
+
+            <button class="acceptButton" *ngIf="(orderDetail.items[0].orderStatus == 'driveraccepted')" ion-button (click)="checkOnAlterDaily('ontheway', orderDetail._id,pkg)">On The Way</button>
+
+            <button class="acceptButton" *ngIf="orderDetail.items[0].orderStatus == 'ontheway'" ion-button (click)="checkOnAlterDaily('delivered', orderDetail._id,pkg)">Delivered</button>
+        
+        </ion-row>
+            </ion-row>
+ -->
+
+
+
+
+
+    <ion-row *ngIf = "orderDetail.combo && orderDetail.combo.length > 0" class = "whiteDiv">
+        <ion-row class="width100"><strong>Combo Items</strong><span *ngIf = "orderDetail.menuStatus" class="deliveredClass"> Delivered</span></ion-row>
+        <hr class="width100 height2px">
+        <ion-row *ngFor = "let combo of orderDetail.combo; let i = index; " class="width100 divHighlighted">
+            <ion-row class="width100">
+                <ion-col class="">
+                    <strong>{{i+1}})</strong> {{combo.name}}
+                </ion-col>
+                <ion-col col-2>
+                    <strong> X {{combo.qty}} </strong>
+                </ion-col>
+                <ion-col text-right col-4 col-sm-3 class="colorLightGray paddingTop9px">
+                    <span *ngIf = "orderDetail.currency">{{orderDetail.currency}}</span> {{combo.qty * combo.finalcomboprice | number : '1.2-2'}}
+                </ion-col>
+            </ion-row>
+            <ion-row class="width100">
+                <ion-col col-4 class="whiteSpaceInitial" *ngFor = "let menus of combo.menuId;">
+
+                    <ion-row class="margin5px">
+                        <!-- <ion-col col-12 no-padding class="itemImage comboMenuImage width100" [ngStyle]="{'background-image': 'url(' + itemImage(menus.image) + ')'}">
+                        </ion-col> -->
+                        <img class="profile-img "  style="object-fit: cover;" width="100px" height="100px" [src]="itemImage(menus.image)">
+                        <ion-col col-12 text-capitalize class = "font2vh colorBlack bgWhite width100">{{menus.name}}</ion-col>
+                    </ion-row>
+                    
+                </ion-col>
+            </ion-row>
+        </ion-row>
+        <ion-row *ngIf="orderDetail.driverDetail == undefined">
+            <button class="acceptButton" *ngIf="(orderDetail.status == 'accepted')" ion-button (click)="ComboOnStatus('driveraccepted', orderDetail._id)">Accept</button>
+        </ion-row>
+        <ion-row *ngIf="orderDetail.driverDetail">
+
+       
+            <button class="acceptButton" *ngIf="(orderDetail.status == 'driveraccepted')" ion-button (click)="ComboOnStatus('ontheway', orderDetail._id)">On The Way</button>
+
+            <button class="acceptButton" *ngIf="orderDetail.status == 'ontheway'" ion-button (click)="ComboOnStatus('delivered', orderDetail._id)">Delivered</button>
+        
+        </ion-row>
+    </ion-row>
+
+    <!-- <ion-row *ngIf = "orderDetail.package && orderDetail.package.length > 0" class = "whiteDiv">
+        <ion-row class="width100"><strong>Meal Package Items</strong><span *ngIf = "orderDetail.status == 'delivered' " class="deliveredClass"> Delivered</span></ion-row>
+        <hr class="width100 height2px">
+            <ion-row *ngFor = "let pkg of orderDetail.package; let i = index " class="width100 divHighlighted">
+            <ion-row class="width100">
+                <ion-col class="">
+                    <strong>{{i+1}})</strong> {{pkg.name}}
+                </ion-col>
+                <ion-col text-right col-4 col-sm-3 class="colorLightGray paddingTop9px">
+                    <span *ngIf = "orderDetail.currency">{{orderDetail.currency}}</span> {{pkg.packageprice | number : '1.2-2'}}
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf = "pkg.type == 'fixed' " class="width100">
+                <ion-col col-12> -->
+                    <!-- <strong>Package Duration</strong>
+                </ion-col>
+                <ion-col col-12 padding-left class="colorLightGray">
+                    {{formatDate(pkg.startdate )  | date : 'mediumDate'}} - {{formatDate(pkg.enddate  )   | date : 'mediumDate'}}
+                </ion-col> -->
+                <!-- <ion-row class="width100" *ngIf="orderDetail && orderDetail.delvierySlotsWeek && orderDetail.delvierySlotsWeek.deliverySecondTime"><strong> First Delivery Date :    {{getDateOfFirstWeekly(pkg)}}  </strong> </ion-row>
+                <ion-row class="width100" *ngIf="orderDetail && orderDetail.delvierySlotsWeek && orderDetail.delvierySlotsWeek.deliverySecondTime"><strong> First Delivery Time :    {{getTimeOfFirstWeeklyDelivery(pkg)}}  </strong> </ion-row>
+                <ion-row class="width100" *ngIf="orderDetail && orderDetail.delvierySlotsWeek && orderDetail.delvierySlotsWeek.deliverySecondTime"><strong> Second Delivery Date :    {{getDateOfSecondWeekly(pkg)}}  </strong> </ion-row>
+                <ion-row class="width100" *ngIf="orderDetail && orderDetail.delvierySlotsWeek && orderDetail.delvierySlotsWeek.deliverySecondTime"><strong> Second Delivery Time :    {{getTimeOfSecondForDelivery(pkg)}}  </strong> </ion-row>
+
+                <ion-row class="width100" *ngIf="orderDetail && orderDetail.delvierySlotsWeek && !orderDetail.delvierySlotsWeek.deliverySecondTime"><strong> Delivery Date :    {{getDateOfWeeklyOnce(pkg)}}  </strong> </ion-row>
+                <ion-row class="width100" *ngIf="orderDetail && orderDetail.delvierySlotsWeek && !orderDetail.delvierySlotsWeek.deliverySecondTime"><strong> Delivery Time :    {{getTimeOfWeeklyForDeliveryOnce(pkg)}}  </strong> </ion-row>
+            </ion-col >
+            </ion-row>
+            <ion-row *ngIf = "pkg.type == 'flexible' " >
+                    <ion-col col-12>
+                <ion-row class="width100"><strong> Delivery Date :    {{getDateOfWeekend(pkg)}}  </strong> </ion-row>
+                <ion-row class="width100"><strong> Delivery Time :    {{getTimeOfWeekendForDelivery(pkg)}}  </strong> </ion-row>
+                        </ion-col>
+            </ion-row>
+
+            <ion-row class="width100 padding10px" *ngFor = "let detail of pkg.dayandmenus; let m = index; " [ngClass] = "detail.status?'greenBorder':'grayBorder'">
+                <ion-col col-12>
+                    <strong>{{formatDate(detail.date )    | date : 'mediumDate'}}</strong>
+                
+                    <span float-right class="themeGreen" *ngIf = "pkg.orderStatus == 'delivered' "><strong>Delivered</strong></span> -->
+                    <!-- <span float-right class="themeRed" *ngIf = "getPkgStatus(detail) == 1 ">In Process</span>
+                    <span float-right class="colorGray" *ngIf = "getPkgStatus(detail) == 2 ">Pending</span>
+                    <span float-right class="themeRed" *ngIf = "getPkgStatus(detail) == 3 "><strong>Not Delivered Yet</strong></span> -->
+
+<!-- 
+                </ion-col>
+                <ion-col col-4 no-padding class="whiteSpaceInitial" *ngFor = "let menus of detail.menuids">
+                    <ion-row class="margin5px"> -->
+                        <!-- <ion-col col-12 no-padding class="itemImage comboMenuImage width100" [ngStyle]="{'background-image': 'url(' + itemImage(menus.image) + ')'}"> -->
+                                <!-- <img class="profile-img "  style="object-fit: cover;" width="100px" height="100px" [src]="itemImage(menus.image)"> -->
+                        <!-- </ion-col> -->
+                        <!-- <ion-col col-12 text-capitalize class = "font2vh colorBlack bgWhite width100">{{menus.name}}</ion-col>
+                    </ion-row>
+                </ion-col> -->
+
+                <!-- <ion-icon *ngIf="orderDetail.status == 'driveraccepted' && orderDetail.driverDetail['_id'] == driver['_id'] && !detail.status" [ngClass] = "detail.status?'green':'gray'" class = makeDeliverIcon name="checkmark-circle" ios="ios-checkmark-circle" md="md-checkmark-circle" (click)="markDeliver(i,m)"></ion-icon> -->
+            <!-- </ion-row> -->
+            <!-- <ion-row *ngIf="orderDetail.driverDetail">
+                <button class="acceptButton" *ngIf="(pkg.orderStatus == 'driveraccepted') && (pkg.type =='flexible') " ion-button (click)="checkOnAlter('ontheway', orderDetail._id,pkg)">On The Way</button>
+                <button class="acceptButton" *ngIf="(pkg.orderStatus == 'driveraccepted' && pkg.type =='fixed'  && orderDetail.delvierySlotsWeek && orderDetail.delvierySlotsWeek.dtype == 'Once') || (pkg.orderStatus == 'deliveryForFirstWeek')" ion-button (click)="checkOnAlter('ontheway', orderDetail._id,pkg)">On The Way</button>
+                <button class="acceptButton" *ngIf="pkg.orderStatus == 'driveraccepted' && pkg.type =='fixed'  && orderDetail.delvierySlotsWeek && orderDetail.delvierySlotsWeek.dtype == 'Twice'" ion-button (click)="checkOnAlter('OnTheWayForFirstWeek', orderDetail._id,pkg)">On The Way </button>
+                <button class="acceptButton" *ngIf="pkg.orderStatus == 'ontheway'" ion-button (click)="checkOnAlter('delivered', orderDetail._id,pkg)">Delivered</button>
+                <button class="acceptButton" *ngIf="pkg.orderStatus == 'OnTheWayForFirstWeek'" ion-button (click)="checkOnAlter('deliveryForFirstWeek', orderDetail._id,pkg)">Delivered</button>
+            </ion-row>
+        </ion-row>
+    </ion-row> -->
+
+
+    <!-- <ion-row *ngIf = "orderDetail.addOnItem && orderDetail.addOnItem.length > 0" class = "whiteDiv">
+        <ion-row class="width100"><strong>Add-On Items</strong></ion-row>
+        <span *ngIf = "orderDetail.status == 'delivered' " class="deliveredClass"> Delivered</span>
+        <hr class="width100 height2px">
+            <ion-row *ngFor = "let addOn of orderDetail.addOnItem; let i = index " class="width100 divHighlighted">
+            <ion-row class="width100">
+                <ion-col class="">
+                    <strong>{{i+1}})</strong> {{addOn.name}}
+                </ion-col>
+                <ion-col text-right col-4 col-sm-3 class="colorLightGray paddingTop9px">
+                    <span *ngIf = "orderDetail.currency">{{orderDetail.currency}}</span> {{addOn.finalprice | number : '1.2-2'}}
+                </ion-col>
+            </ion-row>
+            <ion-row >
+                <img class="profile-img "  style="object-fit: cover;" width="100px" height="100px" [src]="itemImage(addOn.image)">
+
+            </ion-row>
+
+        
+        </ion-row>
+    </ion-row> -->
+
+
+
+
+
+    <ion-row *ngIf = "orderDetail.note" class = "whiteDiv">
+        <strong>Note : </strong> {{orderDetail.note}}
+    </ion-row>
+
+    <ion-row class= "whiteDiv displayBlock" *ngIf = "orderDetail">
+
+        <ion-row class="width100 colorLightGray">
+            <ion-col col-6>Total</ion-col>
+            <ion-col text-right><span *ngIf = "orderDetail.currency">{{orderDetail.currency}}</span> {{orderDetail.subtotal | number : '1.2-2'}}</ion-col>
+        </ion-row>
+
+        <ion-row *ngIf = "orderDetail.discount" class="width100 colorLightGray">
+            <ion-col col-6>Discount <span class="discountPercent" *ngIf = "orderDetail.coupon && orderDetail.coupon.type == 'Percent'">({{orderDetail.coupon.percentorpricevalue}} %)</span></ion-col>
+            <ion-col text-right><span *ngIf = "orderDetail.currency">{{orderDetail.currency}}</span> {{orderDetail.discount | number : '1.2-2'}}</ion-col>
+        </ion-row>
+
+        <ion-row *ngIf = "orderDetail.deliveryCharges" class="width100 colorLightGray">
+            <ion-col col-6>Delivery Charges</ion-col>
+            <ion-col text-right><span *ngIf = "orderDetail.currency">{{orderDetail.currency}}</span> {{orderDetail.deliveryCharges | number : '1.2-2'}}</ion-col>
+        </ion-row>
+
+        <ion-row class="width100 colorLightGray">
+            <ion-col col-6>Tax &nbsp;<span class="font2vh"> ({{orderDetail.tax}} %) </span></ion-col>
+            <ion-col text-right><span *ngIf = "orderDetail.currency">{{orderDetail.currency}}</span> {{taxAmmount | number : '1.2-2'}}</ion-col>
+        </ion-row>
+
+        <hr class="width100 height2px">
+
+        <ion-row class="width100 colorLightGray">
+            <ion-col col-6 text-right class="colorGray"><strong>Pay</strong></ion-col>
+            <ion-col text-right><span *ngIf = "orderDetail.currency">{{orderDetail.currency}}</span> {{orderDetail.total | number : '1.2-2'}}</ion-col>
+        </ion-row>
+    </ion-row>
+
+</ion-content>
