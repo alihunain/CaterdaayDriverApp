@@ -102,52 +102,54 @@ export class LoginPage {
 						  this.driver.kitchensallow = [];
 						}
 					  }
-					 let allowedResturants= [] ;
-	 this.oneService.getRestaurants().subscribe( (resturants)=>{
-						  console.log(resturants,'Resturants');
-							console.log(this.driver,"Driver");
-							let zipCodes = this.driver.zip.split(',');
-							console.log(zipCodes[0]);
-							for(let j = 0 ; j < zipCodes.length ; j++){
-						  for(let i = 0 ; i < resturants.message.length ; i ++ ){
-								console.log(this.driver.zip , resturants.message[i].zipcode , this.driver.zip)
-							if(zipCodes[j] && resturants.message[i].zipcode && resturants.message[i].zipcode.toLowerCase() == zipCodes[j].toLowerCase() ){
-								console.log("PUSHED");
-								allowedResturants.push({
-								  resId:resturants.message[i]._id,
-								  status:true
-								});
-							}
-						}
-							}
-							console.log(allowedResturants,this.driver.kitchensallow)
-						  if(allowedResturants != this.driver.kitchensallow){
-							console.log(allowedResturants, 'Allowed Resturant');
-							this.driver.kitchensallow  = allowedResturants;
-						    this.oneService.editDriver({
-							  _id:this.driver._id,
-							  kitchensallow:allowedResturants
-							}).subscribe((res)=>{
-							  console.log(res);
-							  this.driver  = res.message;
-							  console.log("set Driver");
-							  localStorage.setItem('driver',JSON.stringify(res.message));
-							  console.log("navCtrl");
-							  this.navCtrl.setRoot(OrderPage);
-							},(err)=>{
-							  console.log(err);
-							  console.log("navCtrl");
-							  this.navCtrl.setRoot(OrderPage);
-							});
-						  }else{
-							console.log("navCtrl");
-							this.navCtrl.setRoot(OrderPage);
-						  }
-					  },(err)=>{
-						  console.log(err);
-						  console.log("navCtrl");
-						  this.navCtrl.setRoot(OrderPage);
-					  });
+					 let allowedResturants=   this.driver.kitchensallow ;
+					 console.log("navCtrl");
+					 this.navCtrl.setRoot(OrderPage);
+	//  this.oneService.getRestaurants().subscribe( (resturants)=>{
+						//   console.log(resturants,'Resturants');
+						// 	console.log(this.driver,"Driver");
+						// 	let zipCodes = this.driver.zip.split(',');
+						// 	console.log(zipCodes[0]);
+						// 	for(let j = 0 ; j < zipCodes.length ; j++){
+						//   for(let i = 0 ; i < resturants.message.length ; i ++ ){
+						// 		console.log(this.driver.zip , resturants.message[i].zipcode , this.driver.zip)
+						// 	if(zipCodes[j] && resturants.message[i].zipcode && resturants.message[i].zipcode.toLowerCase() == zipCodes[j].toLowerCase() ){
+						// 		console.log("PUSHED");
+						// 		allowedResturants.push({
+						// 		  resId:resturants.message[i]._id,
+						// 		  status:true
+						// 		});
+						// 	}
+						// }
+						// 	}
+							// console.log(allowedResturants,this.driver.kitchensallow)
+						  // if(allowedResturants != this.driver.kitchensallow){
+							// console.log(allowedResturants, 'Allowed Resturant');
+							// this.driver.kitchensallow  = allowedResturants;
+						  //   this.oneService.editDriver({
+							//   _id:this.driver._id,
+							//   kitchensallow:allowedResturants
+							// }).subscribe((res)=>{
+							//   console.log(res);
+							//   this.driver  = res.message;
+							//   console.log("set Driver");
+							//   localStorage.setItem('driver',JSON.stringify(res.message));
+							//   console.log("navCtrl");
+							//   this.navCtrl.setRoot(OrderPage);
+							// },(err)=>{
+							//   console.log(err);
+							//   console.log("navCtrl");
+							//   this.navCtrl.setRoot(OrderPage);
+							// });
+							// }
+				
+
+					
+					  // },(err)=>{
+						//   console.log(err);
+						//   console.log("navCtrl");
+						//   this.navCtrl.setRoot(OrderPage);
+					  // });
 					//   console.log("navCtrl");
 					// this.navCtrl.setRoot(OrderPage);
 

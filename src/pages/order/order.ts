@@ -74,36 +74,37 @@ export class OrderPage {
         this.driver.kitchensallow = [];
       }
     }
-   let allowedResturants= [] ;
-    this.oneService.getRestaurants().subscribe(async (resturants)=>{
-        console.log(resturants,'Resturants');
-        console.log(this.driver,"Driver");
-        let zipCodes = this.driver.zip.split(',');
-        for(let j = 0 ; j < zipCodes.length ; j++){
-        for(let i = 0 ; i < resturants.message.length ; i ++ ){
-          if(zipCodes[j] && resturants.message[i].zipcode && resturants.message[i].zipcode.toLowerCase() === zipCodes[j].toLowerCase() ){
-              allowedResturants.push({
-                resId:resturants.message[i]._id,
-                status:true
-              });
-          }
-        }
-      }
-        if(allowedResturants != this.driver.kitchensallow){
-          console.log(allowedResturants, 'Allowed Resturant');
-          this.driver.kitchensallow  = allowedResturants;
-         await this.oneService.editDriver({
-            _id:this.driver._id,
-            kitchensallow:allowedResturants
-          }).subscribe((res)=>{
-            console.log(res);
-            this.driver  = res.message;
-            localStorage.setItem('driver',JSON.stringify(res.message));
-          },(err)=>{
-            console.log(err);
-          });
-        }
-    });
+    let allowedResturants= this.driver.kitchensallow ;
+    console.log(allowedResturants,"Ali working ");
+    // this.oneService.getRestaurants().subscribe(async (resturants)=>{
+    //     console.log(resturants,'Resturants');
+    //     console.log(this.driver,"Driver");
+    //     let zipCodes = this.driver.zip.split(',');
+    //     for(let j = 0 ; j < zipCodes.length ; j++){
+    //     for(let i = 0 ; i < resturants.message.length ; i ++ ){
+    //       if(zipCodes[j] && resturants.message[i].zipcode && resturants.message[i].zipcode.toLowerCase() === zipCodes[j].toLowerCase() ){
+    //           allowedResturants.push({
+    //             resId:resturants.message[i]._id,
+    //             status:true
+    //           });
+    //       }
+    //     }
+    //   }
+    //     if(allowedResturants != this.driver.kitchensallow){
+    //       console.log(allowedResturants, 'Allowed Resturant');
+    //       this.driver.kitchensallow  = allowedResturants;
+    //      await this.oneService.editDriver({
+    //         _id:this.driver._id,
+    //         kitchensallow:allowedResturants
+    //       }).subscribe((res)=>{
+    //         console.log(res);
+    //         this.driver  = res.message;
+    //         localStorage.setItem('driver',JSON.stringify(res.message));
+    //       },(err)=>{
+    //         console.log(err);
+    //       });
+    //     }
+    // });
 
 
   }
